@@ -114,7 +114,7 @@ echo $restavracija_id;
 
     <script>
         function showSuccessMessage() {
-            
+            alert("Uspešna rezervacija!");
         }
     </script>
  <!-- Footer Start -->

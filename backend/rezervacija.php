@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     dodajRezervacijo($datum_rezervacije, $st_ljudi, $TK_uporabnik, $current_restavracija_id);
 
     // Redirect to the appropriate page
-   // header("Location: ../frontend/restavracijeUporabnik.php");
+    header("Location: ../frontend/restavracijeUporabnik.php");
     exit;
 }
 

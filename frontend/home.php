@@ -5,19 +5,30 @@ include "../backend/server.php";
 session_start();
 
 // Check if the user is logged in
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+if (isset($_SESSION['user_id'])) {
+    // User is logged in
+    $additionalButton1 = '<li class="nav-item"><a class="nav-link" href="restavracijeUporabnik.php">RESTAVRACIJE</a></li>';
+    $additionalButton = '';
+    $logoutButton = '<li class="nav-item"><a class="nav-link" href="../backend/logout.php">LOGOUT</a></li>';
+    $logIn = '';
+    $register = '';
+
+} else if (isset($_SESSION['lastnik_id'])){
     // User is logged in
     $additionalButton = '<li class="nav-item"><a class="nav-link" href="restavracije.php">UREDI</a></li>';
+    $additionalButton1 = '';
     $logoutButton = '<li class="nav-item"><a class="nav-link" href="../backend/logout.php">LOGOUT</a></li>';
     $logIn = '';
     $register = '';
 } else {
     // User is not logged in
+    $additionalButton1 = '';
     $additionalButton = ''; // No additional button when not logged in
     $logoutButton = '';
     $logIn = '<li class="nav-item"><a class="nav-link" href="login.php">LOGIN</a></li>';
     $register = '<li class="nav-item"><a class="nav-link" href="registracija.php">REGISTRACIJA</a></li>';
 }
+
 ?>
 
 
@@ -70,10 +81,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             <li class="nav-item">
                 <a class="nav-link" href="home.php">DOMOV</a>
             </li>
+            <?php echo $additionalButton1;?>
             <?php echo $additionalButton; // Display additional button if logged in ?>
-            <li class="nav-item">
-                <a class="nav-link" href="restavracijeUporabnik.php">RESTAVRACIJE</a>
-            </li>
             <?php echo $logoutButton; // Display logout button if logged in ?>
             <?php echo $logIn; // Display logout button if logged in ?>
             <?php echo $register; // Display logout button if logged in ?>
