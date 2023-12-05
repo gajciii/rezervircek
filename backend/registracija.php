@@ -1,7 +1,6 @@
 <?php
-include "server.php"; // Include the file with database connection
+include "server.php";
 
-// Preveri, ali je obrazec za registracijo oddan
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $ime = $_POST['ime'];
@@ -10,10 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['email'];
         $geslo = hash('sha256', $_POST['geslo']);
 
-        // Pripravi SQL stavek
         $query = "INSERT INTO uporabnik (ime, priimek, telefonska_stevilka, email, geslo) VALUES (:ime, :priimek, :telefonska_stevilka, :email, :geslo)";
 
-        // Pripravi in izvedi poizvedbo s PDO
         $stmt = $povezava->prepare($query);
         $stmt->bindParam(':ime', $ime);
         $stmt->bindParam(':priimek', $priimek);
@@ -23,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt->execute();
 
-        echo "Uporabnik uspešno dodan!";
+        header("Location: ../frontend/login.php");
     } catch (PDOException $e) {
         echo "Napaka pri dodajanju uporabnika: " . $e->getMessage();
     }

@@ -1,20 +1,36 @@
 <?php
 
 include "server.php";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
+
 session_start();
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get data from the form
+   
     $datum_rezervacije = $_POST['datum_rezervacije'];
     $st_ljudi = $_POST['st_ljudi'];
     $TK_uporabnik = $_POST['TK_uporabnik'];
     $current_restavracija_id = $_POST['restavracija_id'];
 
-    // Call the function to add the reservation to the database
+
     dodajRezervacijo($datum_rezervacije, $st_ljudi, $TK_uporabnik, $current_restavracija_id);
 
-    // Redirect to the appropriate page
+
+
+    $enquirydata = [
+        "Datum rezervacije" => $datum_rezervacije,
+        "Število ljudi" => $st_ljudi,
+        "Uporabnik" => $TK_uporabnik,
+        "Restavracija" => $current_restavracija_id
+    ];
+    posljiEmail($enquirydata);
+
     header("Location: ../frontend/restavracijeUporabnik.php");
     exit;
 }
@@ -24,23 +40,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 function dodajRezervacijo($datum_rezervacije, $st_ljudi, $TK_uporabnik, $current_restavracija_id){
     global $povezava;
 
-    // Assuming 'stanje' should be set to 1 for a new reservation
     $stanje = 1;
 
-    // Prepare the SQL statement
     $stmt = $povezava->prepare("INSERT INTO dsr.rezervacija (stanje, datum_rezervacije, št_ljudi, TK_uporabnik, TK_restavracija) VALUES (?, ?, ?, ?, ?)");
  
-    // Bind parameters using bindValue for PDO
+    
     $stmt->bindValue(1, $stanje, PDO::PARAM_INT);
     $stmt->bindValue(2, $datum_rezervacije, PDO::PARAM_STR);
     $stmt->bindValue(3, $st_ljudi, PDO::PARAM_INT);
     $stmt->bindValue(4, $TK_uporabnik, PDO::PARAM_INT);
     $stmt->bindValue(5, $current_restavracija_id, PDO::PARAM_INT);
 
-    // Execute the statement
+    
     $stmt->execute();
 
-    // Check for errors
+    
     if ($stmt->errorCode() !== '00000') {
         $errorInfo = $stmt->errorInfo();
         echo "Error adding reservation: " . $errorInfo[2];
@@ -51,7 +65,44 @@ function dodajRezervacijo($datum_rezervacije, $st_ljudi, $TK_uporabnik, $current
         $current_restavracija_id" ;
     }
 
-    // Close the statement
+ 
     $stmt->closeCursor();
 }
+
+
+
+
+
+
+function posljiEmail($enquirydata){
+    $mail = new PHPMailer(true);
+
+    try {
+       
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                  
+        $mail->isSMTP();                                         
+        $mail->Host       = 'sandbox.smtp.mailtrap.io';                   
+        $mail->SMTPAuth   = true;                                   
+        $mail->Username   = '9f53e7b04eb819';                    
+        $mail->Password   = '8df62b92620aab';                           
+        $mail->SMTPSecure = 'tls';            
+        $mail->Port       = 2525;                                   
+    
+        $mail->setFrom('rezervircekAdmin@gmail.com', 'Admin');
+        $mail->addAddress('user1@gmail.com', 'User1'); 
+
+        $mail->isHTML(true);                                 
+        $mail->Subject = 'Rezervacija uspesna!';
+        $mail->Body    = 'Pozdravljeni, <br />zahvaljujemo se vam za rezervacijo preko Rezervircka! <br /> Lep pozdrav, <br />Ekipa Retervircek';
+        $mail->AltBody = 'Zahvaljujemo se vam za rezervacijo preko Rezervircka!';
+    
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+
+
+}
+
 ?>
