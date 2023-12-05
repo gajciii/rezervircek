@@ -28,7 +28,6 @@ if (isset($_SESSION['user_id'])) {
 
 $restavracija_id = $_GET['restavracija_id'];
 
-echo $restavracija_id;
 
 
 
@@ -97,7 +96,7 @@ echo $restavracija_id;
          </div>
     </nav>
 
-    <?php echo $_SESSION['user_id']; ?>
+    
     <h2>Rezervacija</h2>
     
     <form action="../backend/rezervacija.php" method="post">

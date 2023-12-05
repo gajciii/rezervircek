@@ -58,6 +58,17 @@ if (isset($_SESSION['user_id'])) {
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script> //jQuery
+        $(document).ready(function(){
+            $("p").hide();
+            $("#show").click(function(){
+                $("p").show();
+                $("button").hide();
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -125,7 +136,10 @@ if (isset($_SESSION['user_id'])) {
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
                         Rezervirček.doo
                     </div>
-                    
+                    <div>
+                        <p>Našel si eno skrivnost, ali lahko odkriješ še kakšno? </p>
+                        <button id="show">Skrivnost</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,6 +151,7 @@ if (isset($_SESSION['user_id'])) {
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>

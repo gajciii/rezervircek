@@ -7,7 +7,6 @@ use PHPMailer\PHPMailer\Exception;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
-
 session_start();
 
 
@@ -18,10 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $TK_uporabnik = $_POST['TK_uporabnik'];
     $current_restavracija_id = $_POST['restavracija_id'];
 
-
     dodajRezervacijo($datum_rezervacije, $st_ljudi, $TK_uporabnik, $current_restavracija_id);
-
-
 
     $enquirydata = [
         "Datum rezervacije" => $datum_rezervacije,
@@ -59,10 +55,7 @@ function dodajRezervacijo($datum_rezervacije, $st_ljudi, $TK_uporabnik, $current
         $errorInfo = $stmt->errorInfo();
         echo "Error adding reservation: " . $errorInfo[2];
     } else {
-        echo "Reservation added successfully!</br> $datum_rezervacije.
-        $st_ljudi.
-        $TK_uporabnik.
-        $current_restavracija_id" ;
+        echo "Reservation added successfully!</br>" ;
     }
 
  
@@ -93,7 +86,7 @@ function posljiEmail($enquirydata){
 
         $mail->isHTML(true);                                 
         $mail->Subject = 'Rezervacija uspesna!';
-        $mail->Body    = 'Pozdravljeni, <br />zahvaljujemo se vam za rezervacijo preko Rezervircka! <br /> Lep pozdrav, <br />Ekipa Retervircek';
+        $mail->Body    = 'Pozdravljeni, <br />zahvaljujemo se vam za rezervacijo preko Rezervircka! <br /> Lep pozdrav, <br />Ekipa Rezervircek';
         $mail->AltBody = 'Zahvaljujemo se vam za rezervacijo preko Rezervircka!';
     
         $mail->send();
